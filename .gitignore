@@ -1,0 +1,62 @@
+
+
+# Ignore node_modules and build in the frontend folder
+/frontend/node_modules/
+/frontend/build/
+/frontend/dist/
+/frontend/.env
+/frontend/.DS_Store
+
+# Ignore target, IDE files, and logs in the PetSlot folder (Spring Boot)
+# Java/Spring Boot
+/PetSlot/target/
+/PetSlot/bin/
+/PetSlot/.mvn/
+/PetSlot/.idea/
+/PetSlot/.classpath
+/PetSlot/.project
+/PetSlot/*.iml
+/PetSlot/*.log
+/PetSlot/*.war
+/PetSlot/*.jar
+/PetSlot/*.class
+/PetSlot/**/logs/
+/PetSlot/**/target/
+/PetSlot/**/out/
+
+# Ignore OS-specific files
+.DS_Store
+*.swp
+*.swo
+*.bak
+*.tmp
+*.log
+*.lock
+
+# MacOS specific
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# IDEs
+/frontend/.vscode/
+/frontend/*.code-workspace
+/PetSlot/.idea/
+/PetSlot/*.suo
+/PetSlot/*.ntvs
+/PetSlot/*.njsproj
+/PetSlot/*.sln
+/PetSlot/*.pssproj
+
+# Maven specific files in PetSlot
+/PetSlot/pom.xml.tag
+/PetSlot/pom.xml.releaseBackup
+/PetSlot/pom.xml.versionsBackup
+/PetSlot/pom.xml.next
+/PetSlot/release.properties
