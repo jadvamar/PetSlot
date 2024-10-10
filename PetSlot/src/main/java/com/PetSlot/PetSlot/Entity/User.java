@@ -1,9 +1,12 @@
 package com.PetSlot.PetSlot.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -18,10 +21,10 @@ public class User {
     @Column(name = "name", length = 255, nullable = false)
     private String name;
 
-    @Column(name = "email", length = 255, nullable = false)
+    @Column(name = "email", length = 255, nullable = false,unique = true)
     private String email;
 
-    @Column(name = "password", length = 255, nullable = false)
+    @Column(name = "password", length = 255, nullable = true)
     private String password;
 
     @Column(name = "role", nullable = false)
@@ -29,6 +32,10 @@ public class User {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Shop shop;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<BookedSlots> shopUserBoxes;
 
     public User() {
     }

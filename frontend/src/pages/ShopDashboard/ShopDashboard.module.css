@@ -1,0 +1,276 @@
+/* Outer container for modal */
+.outerDiv {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 8000;
+  background-color: rgba(28, 28, 28, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto; /* Allows scrolling if content exceeds viewport */
+}
+.shopDetailsContainer {
+  padding: 20px; /* Add some padding to the container */
+}
+
+.datePickerContainer {
+  margin-bottom: 20px; /* Space between date picker and table */
+}
+.statusBtn {
+  background-color: #ff5722;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.greenText {
+  color: green;
+  font-weight: bold;
+}
+
+.statusBtn:hover {
+  background-color: #e64f21;
+}
+
+/* Table styling */
+.bookingTable {
+  width: 100%; /* Make table full width */
+  border-collapse: collapse; /* Collapse borders for a cleaner look */
+  margin-top: 10px;
+  border-color: #333; /* Space above the table */
+}
+
+.bookingTable th,
+.bookingTable td {
+  border: 5px solid #ddd; /* Add a light border to table cells */
+  padding: 10px; /* Padding inside cells */
+  text-align: left; /* Align text to the left */
+}
+
+.bookingTable th {
+  background-color: #f2f2f2; /* Light background for table headers */
+  font-weight: bold; /* Make header text bold */
+}
+
+.bookingTable tr:nth-child(even) {
+  background-color: #f9f9f9; /* Alternate row color for better readability */
+}
+
+.bookingTable tr:hover {
+  background-color: #f1f1f1; /* Highlight row on hover */
+}
+
+/* Modal container */
+.modal {
+  width: 90%;
+  max-width: 500px; /* Maximum width for larger screens */
+  height: auto; /* Auto height for flexibility */
+  padding: 20px 30px;
+  background-color: white;
+  border-radius: 12px; /* Rounded corners for modern look */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  overflow-y: auto; /* Add subtle shadow for depth */
+}
+
+/* Header section */
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Vertically align the title and close button */
+  margin-bottom: 15px; /* Add space between header and content */
+}
+
+.ttl {
+  font-size: 1.8rem;
+  font-weight: 600; /* Slightly bolder font for better readability */
+  color: #333; /* Darker color for better contrast */
+}
+
+.closeBtn {
+  background: none; /* Remove background */
+  border: none; /* Remove border */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 1.5rem; /* Larger close button */
+}
+
+/* Input box and button styling */
+.inpBox,
+.btn {
+  margin: 12px 0; /* Increased margin for better spacing */
+  padding: 14px;
+  border-radius: 6px; /* Slightly more rounded corners */
+  border: 1px solid rgb(207, 207, 207);
+  outline: none;
+  font-size: 1.1rem;
+  color: rgb(28, 28, 28);
+  width: 100%; /* Ensure inputs are full-width */
+  box-sizing: border-box; /* Include padding and border in element's width */
+}
+
+/* Button styling */
+.btn {
+  background-color: #ef4f5f; /* Primary button color */
+  color: white;
+  font-weight: 600; /* Bolder font weight */
+  cursor: pointer;
+  border: none; /* Remove default border */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.btn:hover {
+  background-color: #d83f4b; /* Darker shade on hover */
+}
+
+/* Error and success message styling */
+.error {
+  color: red; /* Set text color to red */
+  font-size: 0.9em; /* Slightly larger font size for error messages */
+  margin-top: 5px; /* Add space above error messages */
+}
+
+.message {
+  color: green; /* Set text color for success messages */
+  font-size: 1em; /* Standard font size for messages */
+}
+
+/* Map container for responsiveness */
+.mapContainer {
+  height: 400px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.mapInner {
+  height: 100%;
+  width: 100%;
+}
+
+/* Responsive behavior for smaller screens */
+@media all and (max-width: 420px) {
+  .modal {
+    width: 100%; /* Full width on small screens */
+    height: auto; /* Auto height for flexibility */
+    padding: 15px; /* Reduce padding for better fit */
+    margin: 2rem 0; /* Add margin to prevent modal from touching screen edges */
+  }
+
+  .btn {
+    padding: 12px; /* Slightly reduce padding for buttons */
+    font-size: 1rem; /* Reduce font size for buttons */
+  }
+
+  .inpBox {
+    padding: 12px; /* Slightly reduce padding for inputs */
+    font-size: 1rem; /* Reduce input font size */
+  }
+}
+
+@media (max-width: 768px) {
+  .mapContainer {
+    height: 250px; /* Reduce height on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .mapContainer {
+    height: 200px; /* Further reduce height for mobile screens */
+  }
+  .bookings-container {
+    padding: 20px;
+    background-color: #f9f9f9; /* Light background */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }
+
+  h1 {
+    font-size: 2rem; /* Title font size */
+    margin-bottom: 20px; /* Space below title */
+  }
+
+  .filters {
+    display: flex;
+    align-items: center; /* Align items vertically center */
+    margin-bottom: 20px; /* Space below filters */
+  }
+
+  .filters select,
+  .filters .date-pickers input {
+    margin-right: 10px; /* Space between elements */
+    padding: 10px; /* Padding for better touch targets */
+    border-radius: 5px; /* Rounded corners */
+    border: 1px solid #ccc; /* Light border */
+    width: 200px; /* Fixed width for consistency */
+  }
+
+  .date-pickers {
+    display: flex;
+  }
+
+  .clear-btn {
+    background-color: rgb(239, 79, 95);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .clear-btn:hover {
+    background-color: rgb(220, 63, 75); /* Darker shade on hover */
+  }
+
+  .bookings-table {
+    width: 100%; /* Full width */
+    border-collapse: collapse; /* Collapse borders */
+    margin-top: 15px; /* Space above table */
+  }
+
+  .bookings-table th,
+  .bookings-table td {
+    border: 1px solid rgb(207, 207, 207); /* Border for table cells */
+    padding: 10px; /* Padding for table cells */
+    text-align: left; /* Align text to the left */
+  }
+
+  .bookings-table th {
+    background-color: rgb(239, 79, 95); /* Header background color */
+    color: white; /* Header text color */
+  }
+
+  .bookings-table tr:nth-child(even) {
+    background-color: #f2f2f2; /* Zebra striping for rows */
+  }
+
+  .edit-btn,
+  .delete-btn {
+    margin-right: 5px; /* Space between buttons */
+    padding: 5px 10px; /* Padding for buttons */
+    border-radius: 5px; /* Rounded corners */
+    border: none; /* Remove default border */
+    cursor: pointer; /* Pointer cursor on hover */
+  }
+
+  .edit-btn {
+    background-color: #4caf50; /* Green for edit */
+    color: white; /* Text color */
+  }
+
+  .delete-btn {
+    background-color: #f44336; /* Red for delete */
+    color: white; /* Text color */
+  }
+
+  .edit-btn:hover {
+    background-color: #45a049; /* Darker green on hover */
+  }
+
+  .delete-btn:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+  }
+}

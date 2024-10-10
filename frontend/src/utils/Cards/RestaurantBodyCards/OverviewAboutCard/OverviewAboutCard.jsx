@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import copyIcon from "/icons/copy.png";
 import directioIcon from "/icons/direction.png";
@@ -9,21 +9,27 @@ import AlertBox from "../../../Alerts/AlertBox/AlertBox";
 import BtnWithIcon from "../../../Buttons/BtnWithIcon/BtnWithIcon";
 
 const OverviewAboutCard = ({ data }) => {
-  // Ensure data is not null or undefined, and provide fallback values
+  // Check if data is valid before accessing its properties
   const phone = data?.phone || "N/A"; // Provide a fallback value if phone is undefined
   const address = data?.address || "Address not available";
-  const lat = data?.lat ?? 0; // Use nullish coalescing operator for lat
-  const lng = data?.lng ?? 0;
+  const lat = data?.lat ?? 0; // Check if data and lat are defined
+  const lng = data?.lag ?? 0; // Check if data and lag are defined
 
   const [alert, setAlert] = useState({
     show: false,
   });
 
+  // Alert timeout handling
   if (alert.show) {
     setTimeout(() => {
       setAlert({ show: false });
-    }, 5000); // No need to use an array in `setTimeout`
+    }, 5000);
   }
+
+  const handleDirectionClick = () => {
+    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+    window.open(googleMapsUrl, "_blank"); // Open Google Maps in a new tab
+  };
 
   const handleCopyClick = () => {
     setAlert({ show: true });
@@ -45,7 +51,7 @@ const OverviewAboutCard = ({ data }) => {
                 <MapComponent
                   position={[lat, lng]} // Pass the lat/lng coordinates
                   setPosition={[lat, lng]}
-                  setAddress={data.address}
+                  setAddress={address}
                 />
               ) : (
                 <div>No map available</div>
@@ -55,7 +61,11 @@ const OverviewAboutCard = ({ data }) => {
           </div>
           <div className={css.btns}>
             <BtnWithIcon icon={copyIcon} txt="Copy" onClick={handleCopyClick} />
-            <BtnWithIcon icon={directioIcon} txt="Direction" />
+            <BtnWithIcon
+              icon={directioIcon}
+              txt="Direction"
+              onClick={handleDirectionClick}
+            />
           </div>
         </div>
       </div>

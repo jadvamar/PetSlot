@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { createPortal } from "react-dom";
 import Cookies from "js-cookie";
 
@@ -6,6 +6,8 @@ import gLogo from "/images/google.png";
 import closeBtn from "/images/closeBtn.jpg";
 
 import loginCss from "./Login.module.css";
+
+import { userInfo } from "../../../Context/UserContext";
 
 let Login = ({
   setAuth,
@@ -17,6 +19,7 @@ let Login = ({
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [loginMessage, setLoginMessage] = useState("");
+  const { user, setUser } = useContext(userInfo);
 
   const validateForm = () => {
     const newErrors = {};
@@ -60,6 +63,9 @@ let Login = ({
           const data = await response.json();
           const token = data.token;
           const email = data.username;
+          setUser({
+            email: data.email,
+          });
 
           // Store the token in a cookie (expires in 7 days)
           Cookies.set("token", token, { expires: 7 });
@@ -142,7 +148,7 @@ let Login = ({
         </div>
         <hr className={loginCss.break} />
         <div className={loginCss.newToZomato}>
-          New to Zomato?{" "}
+          New to PetSlot?{" "}
           <div
             className={loginCss.createAcc}
             onClick={() =>

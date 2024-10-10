@@ -6,7 +6,7 @@ import { validateToken } from "../../Auth/ValidateToken";
 import MapComponent from "../../Map/MapComponent"; // Import the map component
 import signupCss from "./AddRestraurentForm.module.css"; // Your existing CSS
 import closeBtn from "/images/closeBtn.jpg"; // Close button image
-
+import { Link } from "react-router-dom";
 const PetServiceSignup = ({ setAuth }) => {
   const [loggedIn, setLoggedIn] = useState(
     localStorage.getItem("auth") || false
@@ -148,7 +148,7 @@ const PetServiceSignup = ({ setAuth }) => {
       );
       setMessage("Service added successfully!");
     } catch (error) {
-      setMessage("Error adding service.");
+      setMessage("You have already registered a shop.");
     }
   };
 
@@ -166,11 +166,15 @@ const PetServiceSignup = ({ setAuth }) => {
               setAuth({ closed: true, login: false, signup: false })
             }
           >
-            <img
-              className={signupCss.closeBtnImg}
-              src={closeBtn}
-              alt="close button"
-            />
+            <Link to="/">
+              {" "}
+              {/* Wrap the content with Link component */}
+              <img
+                className={signupCss.closeBtnImg}
+                src={closeBtn}
+                alt="close button"
+              />
+            </Link>
           </span>
         </div>
         <form onSubmit={handleSubmit}>

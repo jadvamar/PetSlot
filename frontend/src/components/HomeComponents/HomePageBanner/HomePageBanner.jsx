@@ -52,7 +52,7 @@ let HomePageBanner = () => {
             Healthy Pets, Happy Hearts: Book Your Grooming Slot Today!
           </div>
           <div className={css.searchbar}>
-            <SearchBar handleLocationSearch={handleLocationSearch} />{" "}
+            {/* <SearchBar handleLocationSearch={handleLocationSearch} />{" "} */}
             {/* Pass the function here */}
           </div>
         </div>

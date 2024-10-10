@@ -192,7 +192,7 @@ let Signup = ({ setAuth }) => {
                 onChange={() => setTermsAccepted(!termsAccepted)} // Toggle checkbox
               />
               <span>
-                I agree to Zomato's{" "}
+                I agree to PetSlot's{" "}
                 <a href="" className={signupCss.termaAnchor}>
                   Terms of Service, Privacy Policy
                 </a>{" "}

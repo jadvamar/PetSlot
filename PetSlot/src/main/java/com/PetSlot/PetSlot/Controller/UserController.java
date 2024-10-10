@@ -1,19 +1,18 @@
 package com.PetSlot.PetSlot.Controller;
 
 import com.PetSlot.PetSlot.DTO.*;
-import com.PetSlot.PetSlot.Entity.Images;
-import com.PetSlot.PetSlot.Entity.Pets;
-import com.PetSlot.PetSlot.Entity.Services;
-import com.PetSlot.PetSlot.Entity.Shop;
+import com.PetSlot.PetSlot.Entity.*;
 import com.PetSlot.PetSlot.Repository.*;
 import com.PetSlot.PetSlot.Security.JwtHelper;
 import com.PetSlot.PetSlot.Services.ShopService;
 import com.PetSlot.PetSlot.Services.UserService;
+import com.PetSlot.PetSlot.Services.impl.BookedSlotsService;
 import com.PetSlot.PetSlot.Services.impl.CustomerDetails;
 import java.sql.Time;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -52,12 +52,15 @@ public class UserController {
     private UserService userService;
 
     @Autowired
+    private BookedSlotsRepository bookedSlotsRepository;
+    @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private ShopRepository shopRepository;
     @Autowired
     private ImagesRepository imageRepository;
+    @Autowired
+    private BookedSlotsService bookedSlotsService;
     @Autowired
     private ServicesRepository servicesRepository;
     @Autowired
@@ -69,6 +72,88 @@ public class UserController {
         String response = userService.signupUser(userDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
+    @PostMapping("/book-slot")
+    public ResponseEntity<?> bookSlot(@RequestBody BookedSlotDTO bookedSlotDTO) {
+        try {
+            // Log the received bookedSlots
+            System.out.println("Received booking request: " + bookedSlotDTO);
+
+            Optional<Shop> shop = shopRepository.findById(bookedSlotDTO.getShop());
+            Optional<User> user = userRepository.findById(bookedSlotDTO.getUser());
+
+            // Check if shop and user exist
+            if (shop.isEmpty()) {
+                return new ResponseEntity<>("Shop not found", HttpStatus.NOT_FOUND);
+            }
+            if (user.isEmpty()) {
+                return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+            }
+
+
+            BookedSlots bookedSlots = new BookedSlots();
+            bookedSlots.setUser(user.get());
+            bookedSlots.setShop(shop.get());
+            bookedSlots.setStartTime(bookedSlotDTO.getStartTime());
+            bookedSlots.setEndTime(bookedSlotDTO.getEndTime());
+            bookedSlots.setDate(bookedSlotDTO.getDate());
+            bookedSlots.setCompleted(1);
+            //System.out.println("Bookslot"+bookedSlots);
+            System.out.println("working till this");
+
+            //System.out.println(bookedSlots);
+            BookedSlots savedSlot = bookedSlotsService.saveBookedSlot(bookedSlots);
+            System.out.println("working till this1");
+            return new ResponseEntity<>(savedSlot, HttpStatus.CREATED);
+        } catch (Exception e) {
+            // Log the error
+            System.err.println("Error booking slot: " + e.getMessage());
+            return new ResponseEntity<>("Error occurred while booking the slot: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    @GetMapping("/{shopId}/unavailable-slots")
+    public ResponseEntity<List<BookedSlotDTO>> getUnavailableBoxes(
+            @PathVariable Long shopId,
+            @RequestParam String date) {
+        LocalDate localDate = LocalDate.parse(date); // Convert the date string to LocalDate
+        List<BookedSlotDTO> unavailableSlots = bookedSlotsService.getUnavailableSlots(shopId, localDate);
+        return ResponseEntity.ok(unavailableSlots);
+    }
+
+    @PostMapping("/makeComplete")
+    public ResponseEntity<?> makeComplete(@RequestParam Long id) {
+        Optional<BookedSlots> bookedSlot = bookedSlotsRepository.findById(id);
+
+        if (bookedSlot.isPresent()) {
+            bookedSlot.get().setCompleted(2); // Set completed to 2 (Completed status)
+            bookedSlotsRepository.save(bookedSlot.get()); // Save the updated entity
+            return ResponseEntity.ok("Slot marked as complete");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Slot not found");
+        }
+    }
+
+    @GetMapping("/getBookings")
+    public ResponseEntity<List<BookedSlotDTO>> getCompanyHistory(@RequestParam Long userid,@RequestParam String date){
+        Long shopId = shopRepository.findShopIdByUserId(userid);
+        System.out.println("shop id --------------->" + shopId);
+        if (shopId == null) {
+            return ResponseEntity.notFound().build(); // Return 404 if no shop found
+        }
+        LocalDate localDate = LocalDate.parse(date);
+        List<BookedSlotDTO> bookedSlots = bookedSlotsService.getHistory(shopId, localDate);
+        System.out.println("working--------------->" + bookedSlots);
+        return ResponseEntity.ok(bookedSlots);
+    }
+    @GetMapping("/getHistory")
+    public ResponseEntity<List<BookedSlotDTO>> getUserHistory(@RequestParam Long userid){
+        List<BookedSlotDTO> bookedSlots = bookedSlotsService.getUserHistory(userid);
+        System.out.println("working--------------->" + bookedSlots);
+        return ResponseEntity.ok(bookedSlots);
+    }
+
 
     @PostMapping(path = "/Shop", consumes = "multipart/form-data")
     public ResponseEntity<String> addShops(@RequestParam("companyName") String name,
@@ -97,6 +182,7 @@ public class UserController {
         }
     }
 
+    
 
     @PostMapping(path = "/login")
     public ResponseEntity<JwtResponseDTO> loginEmployee(@RequestBody JwtRequestDTO request) {
@@ -138,6 +224,7 @@ public class UserController {
                     Map<String,String> responce = new HashMap<>();
                     responce.put("email" ,userDetails.getUsername());
                     responce.put("role",((CustomerDetails)userDetails).getRole());
+                    responce.put("id",((CustomerDetails)userDetails).getId());
                     return ResponseEntity.ok(responce); // You can return more user data if needed
                 } else {
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");

@@ -37,6 +37,7 @@ const RestaurantPage = () => {
 
         const data = await response.json();
         setShopData(data);
+        console.log(data);
       } catch (error) {
         console.error("Failed to fetch shop data:", error);
       }

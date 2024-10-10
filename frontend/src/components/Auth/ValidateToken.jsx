@@ -19,7 +19,8 @@ export const validateToken = async (token) => {
       const data = await response.json();
       const email = data.email;
       const role = data.role;
-      return { email, role };
+      const id = data.id;
+      return { email, role, id };
     } else {
       throw new Error("Token validation failed");
     }

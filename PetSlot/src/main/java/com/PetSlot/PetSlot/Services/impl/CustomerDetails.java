@@ -27,6 +27,14 @@ public class CustomerDetails implements UserDetails {
         return user.getPassword();
     }
 
+    public String getId() {
+        return toString(user.getId());
+    }
+
+    private String toString(long id) {  // primitive long, not Long object
+        return String.valueOf(id);      // convert long to String
+    }
+
     @Override
     public String getUsername() {
         return user.getEmail(); // Assuming email is the username

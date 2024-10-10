@@ -23,6 +23,9 @@ public interface ShopRepository extends JpaRepository <Shop,Integer>{
     @Query("SELECT s FROM Shop s WHERE LOWER(s.address) LIKE LOWER(CONCAT('%', :location, '%'))")
     List<Shop> findShopsByLocation(@Param("location") String location);
 
+    @Query("SELECT s.id FROM Shop s WHERE s.user.id = :userId")
+    Long findShopIdByUserId(@Param("userId") Long userId);
+
     @Query("SELECT new com.PetSlot.PetSlot.DTO.ShopDTO(s.id, s.name, s.description, s.address, s.phone, s.start, s.end, s.latitude, s.longitude, u.id) " +
             "FROM Shop s JOIN s.user u WHERE s.id = :id")
     Optional<ShopDTO> findBasicShopDetails(@Param("id") Long id);

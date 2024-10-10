@@ -5,9 +5,8 @@ import menuBar from "/icons/menu.png";
 import downArrow from "/icons/down-arrow.png";
 import profilePic from "/images/profilepic.jpg";
 import Login from "../../Auth/Login/Login";
-import SearchBar from "../../../utils/SearchBar/SearchBar";
 import Signup from "../../Auth/Signup/Signup";
-import css from "./NavigationBar2.module.css";
+import css from "./NavigationbarDashboard.module.css";
 import Cookies from "js-cookie";
 import { userInfo } from "../../../Context/UserContext";
 
@@ -16,7 +15,6 @@ let NavigationBar = ({ toggleMenu, setToggleMenu, setShops }) => {
   const [userEmail, setUserEmail] = useState("");
   const [userRole, setUserRole] = useState("");
   const { user, setUser } = useContext(userInfo);
-
   //const [shops, setShops] = useState([]);
   let [loggedIn, setLoggedIn] = useState(localStorage.getItem("auth") || false);
   let [auth, setAuth] = useState({
@@ -25,42 +23,13 @@ let NavigationBar = ({ toggleMenu, setToggleMenu, setShops }) => {
     signup: false,
   });
 
-  const handleLocationSearch = async (location) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8085/api/v1/user/GetShops?location=${encodeURIComponent(
-          location
-        )}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        // setShops(data);
-        setShops({
-          shops: data,
-          location: location, // Sending location along with shops
-        });
-        console.log(data); // Update the shops state in the parent component
-      } else {
-        setShops({ shops: [], location: location });
-        console.error("shops did not fetched", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
   const logoutHandler = () => {
     setLoggedIn(false);
     Cookies.remove("token");
+    Cookies.remove("email");
     localStorage.removeItem("auth");
     localStorage.removeItem("token");
+    setUser({ id: null, email: "", role: "" });
   };
 
   const refreshNavigationBar2 = () => {
@@ -101,9 +70,6 @@ let NavigationBar = ({ toggleMenu, setToggleMenu, setShops }) => {
             PetSlot
           </Link>
         </div>
-        <div className={css.searchBar}>
-          <SearchBar handleLocationSearch={handleLocationSearch} />
-        </div>
         <div className={css.rightSide}>
           {loggedIn ? (
             <div className={css.menuItem}>
@@ -131,6 +97,7 @@ let NavigationBar = ({ toggleMenu, setToggleMenu, setShops }) => {
                     <div className={css.menuItemLink}>Dashboard</div>
                   </Link>
                 )}
+
                 <Link to="/user/ll/settings" className={css.menuItemLinkTxt}>
                   <div className={css.menuItemLink}>Settings</div>
                 </Link>
@@ -167,7 +134,7 @@ let NavigationBar = ({ toggleMenu, setToggleMenu, setShops }) => {
           <Login
             setAuth={setAuth}
             setLoggedIn={setLoggedIn}
-            //setUserEmail={setUserEmail} // Pass setUserEmail to update the email on login
+            setUserEmail={setUserEmail} // Pass setUserEmail to update the email on login
           />
         )}
         {!auth.closed && auth.signup && <Signup setAuth={setAuth} />}

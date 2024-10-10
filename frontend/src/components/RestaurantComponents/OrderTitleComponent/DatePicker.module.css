@@ -20,18 +20,31 @@
 }
 
 .timeSlot {
-  background-color: #f0f0f0;
+  background-color: #f9f9f9; /* Light background for time slots */
   padding: 10px 20px;
   cursor: pointer;
   border-radius: 5px;
   border: 1px solid #ccc;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.timeSlot:hover {
-  background-color: #ddd;
+.timeSlot:hover:not(.unavailable) {
+  background-color: #e0e0e0; /* Hover effect only for available slots */
 }
 
 .selected {
   background-color: #4caf50;
   color: white;
+  font-weight: bold;
+  border: 1px solid #4caf50;
+}
+
+.unavailable {
+  background-color: #f8d7da; /* Light red background */
+  color: #721c24; /* Dark red text */
+  pointer-events: none; /* Prevent clicking */
+}
+
+.unavailable:hover {
+  background-color: #e0e0e0; /* No hover effect for unavailable slots */
 }

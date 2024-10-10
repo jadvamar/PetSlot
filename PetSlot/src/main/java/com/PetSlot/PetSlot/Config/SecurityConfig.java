@@ -33,6 +33,10 @@ public class SecurityConfig implements WebMvcConfigurer {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter();
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -51,14 +55,19 @@ public class SecurityConfig implements WebMvcConfigurer {
                                 "/api/v1/user/signup",
                                 "/api/v1/user/login",
                                 "/api/v1/user/openShop",
-                                "/api/v1/user/getHeaderImage",// Corrected path
+                                "/api/v1/user/getHeaderImage",
                                 "/api/v1/user/validate-token",
                                 "/api/v1/user/Shop",
-                                "/api/v1/user/GetShops"
+                                "/api/v1/user/GetShops",
+                                "/api/v1/user/{shopId}/unavailable-slots",
+                                "/api/v1/user/book-slot",
+                                "/api/v1/user/getBookings",
+                                "/api/v1/user/getHistory",
+                                "/api/v1/user/makeComplete"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
-
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class) // Add the filter here
                 .formLogin(formLogin -> formLogin.disable())
                 .httpBasic();
         return http.build();

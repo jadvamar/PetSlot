@@ -24,7 +24,9 @@
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
   overflow-y: auto; /* Add subtle shadow for depth */
 }
-
+.p {
+  color: brown;
+}
 /* Header section */
 .header {
   width: 100%;

@@ -1,59 +1,48 @@
-.outerDiv{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.outerDiv {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
-.navbar{
-    width:100%;
-    height: 80px;
+.navbar {
+  flex-shrink: 0; /* Prevent navbar from shrinking */
 }
 
-.box{
-    width: 70%;
+.box {
+  flex-grow: 1; /* Allow box to grow and take available space */
+  padding: 20px;
+  overflow-y: auto; /* Add scrolling if content overflows */
 }
 
-.mainbody{
-    width: 100%;
-    height: auto;
-    display: flex;
+.mainbody {
+  margin: 20px 0;
 }
 
-.leftBox{
-    width: 33%;
+.historyTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
 }
 
-.rightBox{
-    width: 67%;
+.historyTable th,
+.historyTable td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
 }
 
-@media all and (max-width: 1024px){
-    .box{
-        width: 80%;
-    }
-    
+.historyTable th {
+  background-color: #f4f4f4;
 }
-
-@media all and (max-width: 768px){
-    .mainbody{
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    .leftBox{
-        width: 100%;
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    .rightBox{
-        width: 100%;
-    }
+.greenText {
+  color: #11993a;
+  font-weight: bold;
 }
-
-@media all and (max-width: 420px){
-    .box{
-        width: 100%;
-    } 
+.redText {
+  color: #ef544c;
+  font-weight: bold;
+}
+.errorMessage {
+  color: red;
+  margin: 10px 0;
 }

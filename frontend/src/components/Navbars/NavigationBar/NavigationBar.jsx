@@ -145,7 +145,7 @@
 // };
 
 // export default NavigationBar;
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import mobileHand from "/icons/smartphone.png";
@@ -155,6 +155,7 @@ import profilePic from "/images/profilepic.jpg";
 import { validateToken } from "../../Auth/ValidateToken";
 import Login from "../../Auth/Login/Login";
 import Signup from "../../Auth/Signup/Signup";
+import { userInfo } from "../../../Context/UserContext";
 
 import css from "./NavigationBar.module.css";
 
@@ -168,6 +169,7 @@ let NavigationBar = ({ toogleMenu, setToggleMenu, page }) => {
     login: false,
     signup: false,
   });
+  const { user, setUser } = useContext(userInfo);
 
   const logoutHandler = () => {
     setLoggedIn(false);
@@ -184,6 +186,11 @@ let NavigationBar = ({ toogleMenu, setToggleMenu, page }) => {
           setLoggedIn(true);
           setUserEmail(data.email);
           setUserRole(data.role.toLowerCase());
+          setUser({
+            id: data.id, // Save user ID in context
+            email: data.email,
+            role: data.role,
+          });
         } else {
           setLoggedIn(false);
         }
@@ -226,7 +233,7 @@ let NavigationBar = ({ toogleMenu, setToggleMenu, page }) => {
                   alt="profile pic"
                   className={css.profilePic}
                 />
-                <div className={css.profileName}>{userEmail}</div>
+                <div className={css.profileName}>{user.email}</div>
                 <img src={downArrow} alt="arrow" className={css.arrow} />
               </div>
               <div
@@ -236,6 +243,11 @@ let NavigationBar = ({ toogleMenu, setToggleMenu, page }) => {
                 <Link to="/user/ll/reviews" className={css.menuItemLinkTxt}>
                   <div className={css.menuItemLink}>Profile</div>
                 </Link>
+                {userRole === "company" && (
+                  <Link to="/dashboard" className={css.menuItemLinkTxt}>
+                    <div className={css.menuItemLink}>Dashboard</div>
+                  </Link>
+                )}
                 <Link to="/user/ll/settings" className={css.menuItemLinkTxt}>
                   <div className={css.menuItemLink}>Settings</div>
                 </Link>
