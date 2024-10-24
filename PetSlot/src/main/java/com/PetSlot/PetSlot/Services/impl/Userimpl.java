@@ -7,6 +7,7 @@ import com.PetSlot.PetSlot.Repository.UserRepository;
 import com.PetSlot.PetSlot.Services.UserService;
 import com.PetSlot.PetSlot.payload.response.LoginMesage;
 import org.antlr.v4.runtime.misc.NotNull;
+import org.hibernate.annotations.DialectOverride;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,6 +40,29 @@ public class Userimpl implements UserService {
         return user.getEmail();
     }
 
+    @Override
+    public User registerGoogleUser(String email, String name, String role) {
+        // Check if the user already exists
+        User existingUser = userRepo.findByEmail(email);
+        if (existingUser != null) {
+            return existingUser; // Return the existing user
+        }
+
+        // Create a new user if they don't exist
+        User newUser = new User();
+        newUser.setEmail(email);
+        newUser.setName(name);
+        newUser.setRole(role); // Set the role
+
+        // Save the user in the database
+        return userRepo.save(newUser);
+    }
+
+
+    @Override
+    public User isVailable(String email){
+        return userRepo.findByEmail(email);
+    }
 
     UserDTO userDTO;
    @Override

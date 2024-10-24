@@ -10,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
@@ -84,6 +85,7 @@ public class BookedSlotsService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public BookedSlots saveBookedSlot(BookedSlots bookedSlots) {
         Optional<BookedSlots> existingSlot = bookedSlotsRepository.findExistingSlot(
                 bookedSlots.getShop().getId(),

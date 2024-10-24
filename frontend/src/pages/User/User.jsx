@@ -3,6 +3,7 @@ import css from "./User.module.css";
 import Navbar from "../../components/Navbars/NavigationBar2/NavigationBar2";
 import { userInfo } from "../../Context/UserContext";
 import { useContext } from "react";
+import RateYourExperienceCard from "../../utils/Cards/RestaurantBodyCards/RateYourExperienceCard/RateYourExperienceCard";
 
 const User = () => {
   const [userHistory, setUserHistory] = useState([]); // State to hold user history

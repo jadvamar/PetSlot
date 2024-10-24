@@ -1,97 +1,14 @@
-// import { useState } from "react";
-// import { Formik, Form } from "formik";
-
-// import css from "./RateYourExperienceCard.module.css";
-
-// import RadioBtn from "../../../FormUtils/RadioUtil/RadioUtil";
-// import RatingNumberBox from "../../../RestaurantUtils/RatingNumberBox/RatingNumberBox";
-
-// const RateYourExperienceCard = () => {
-//   const [stars, setStars] = useState(0);
-
-//   const [quots] = useState([
-//     "",
-//     "Horrible",
-//     "Bad",
-//     "Average",
-//     "Good",
-//     "Excellent",
-//   ]);
-
-//   const initialValues = {
-//     type: "dining",
-//   };
-
-//   return (
-//     <div className={css.outerDiv}>
-//       <div className={css.innerDiv}>
-//         <div className={css.ttl}>Rate your experience for</div>
-//         {/* <div className={css.radioOptns}>
-//           <Formik initialValues={initialValues}>
-//             <Form className={css.form}>
-//                 <RadioBtn label="Dining" name="type" value="dining" />
-//                 <RadioBtn label="Delivery" name="type" value="delivery" />
-//             </Form>
-//           </Formik>
-//         </div> */}
-//         <div className={css.ratingBox}>
-//           <RatingNumberBox
-//             stars={stars}
-//             txt="1"
-//             iconR={stars > 1}
-//             isActive={stars >= 1}
-//             onClick={() => setStars(1)}
-//           />
-//           <RatingNumberBox
-//             stars={stars}
-//             txt="2"
-//             iconR={stars > 2}
-//             isActive={stars >= 2}
-//             onClick={() => setStars(2)}
-//           />
-//           <RatingNumberBox
-//             stars={stars}
-//             txt="3"
-//             iconR={stars > 3}
-//             isActive={stars >= 3}
-//             onClick={() => setStars(3)}
-//           />
-//           <RatingNumberBox
-//             stars={stars}
-//             txt="4"
-//             iconR={stars > 4}
-//             isActive={stars >= 4}
-//             onClick={() => setStars(4)}
-//           />
-//           <RatingNumberBox
-//             stars={stars}
-//             txt="5"
-//             iconR={stars > 5}
-//             isActive={stars >= 5}
-//             onClick={() => setStars(5)}
-//           />
-//           <div className={css.ratingTxt}>{quots[stars]}</div>
-//         </div>
-//         <div className={css.modalTxt}>Write a Review</div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default RateYourExperienceCard;
-
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Formik, Form, Field } from "formik";
-
+import { useParams } from "react-router-dom"; // Import useParams
 import css from "./RateYourExperienceCard.module.css";
-
-import RadioBtn from "../../../FormUtils/RadioUtil/RadioUtil";
 import RatingNumberBox from "../../../RestaurantUtils/RatingNumberBox/RatingNumberBox";
-
+import { userInfo } from "../../../../Context/UserContext";
+import Cookies from "js-cookie";
 const RateYourExperienceCard = () => {
   const [stars, setStars] = useState(0);
+  const { user } = useContext(userInfo);
   const [review, setReview] = useState("");
-
   const [quots] = useState([
     "",
     "Horrible",
@@ -101,14 +18,43 @@ const RateYourExperienceCard = () => {
     "Excellent",
   ]);
 
+  const { id } = useParams(); // Get shopId from URL
+
   const initialValues = {
-    type: "dining",
     review: "",
   };
 
-  const handleSubmit = (values) => {
-    console.log("Review Submitted:", values);
-    console.log("Rating:", stars);
+  // API call to send rating data
+  const handleSubmit = async (values) => {
+    const ratingData = {
+      userId: user.id,
+      shopId: id, // Use the shopId from the URL
+      rate: stars,
+      comment: values.review,
+    };
+
+    try {
+      console.log(ratingData);
+      const Token = Cookies.get("token");
+      const response = await fetch("http://localhost:8085/api/v1/user/rating", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Token}`,
+        },
+        body: JSON.stringify(ratingData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Review Submitted:", data);
+        // You can display a success message or update UI here
+      } else {
+        console.error("Failed to submit review");
+      }
+    } catch (error) {
+      console.error("Error submitting review:", error);
+    }
   };
 
   return (

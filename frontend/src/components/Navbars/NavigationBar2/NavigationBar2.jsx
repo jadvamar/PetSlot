@@ -76,6 +76,7 @@ let NavigationBar = ({ toggleMenu, setToggleMenu, setShops }) => {
             email: data.email,
             role: data.role,
           });
+          console.log(user.role);
         } else {
           setLoggedIn(false);
         }
@@ -124,16 +125,13 @@ let NavigationBar = ({ toggleMenu, setToggleMenu, setShops }) => {
                 style={{ display: menuDisplay ? "block" : "" }}
               >
                 <Link to="/user/ll/reviews" className={css.menuItemLinkTxt}>
-                  <div className={css.menuItemLink}>Profile</div>
+                  <div className={css.menuItemLink}>History</div>
                 </Link>
-                {userRole === "company" && (
+                {user.role === "Company" && (
                   <Link to="/dashboard" className={css.menuItemLinkTxt}>
                     <div className={css.menuItemLink}>Dashboard</div>
                   </Link>
                 )}
-                <Link to="/user/ll/settings" className={css.menuItemLinkTxt}>
-                  <div className={css.menuItemLink}>Settings</div>
-                </Link>
                 <div className={css.menuItemLinkTxt} onClick={logoutHandler}>
                   <div className={css.menuItemLink}>Logout</div>
                 </div>

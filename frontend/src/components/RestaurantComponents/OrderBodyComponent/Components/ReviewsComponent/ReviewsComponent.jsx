@@ -1,75 +1,63 @@
-import React from "react";
-
-import css from "./ReviewsComponent.module.css";
-
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import RateYourExperienceCard from "../../../../../utils/Cards/RestaurantBodyCards/RateYourExperienceCard/RateYourExperienceCard";
 import RestUserReviewedCard from "../../../../../utils/RestaurantUtils/RestUserReviewedCard/RestUserReviewedCard";
-import DropdownUtil from "../../../../../utils/RestaurantUtils/DropdownUtil/DropdownUtil";
-
+import css from "./ReviewsComponent.module.css";
 import profilepic from "/images/profilepic.jpg";
-import dropdownIcon from "/icons/down-arrow1.png";
-import menu from "/icons/menu.png";
+import Cookies from "js-cookie"; // Make sure to import Cookies
 
 const ReviewsComponent = () => {
-  let data = [
-    {
-      imgSrc: profilepic,
-      title: "Paradise Biryani",
-      address: "Kukatpally, Hyd",
-      reviews: 0,
-      followers: 0,
-      stars: 3,
-      days: 10,
-      votes: 10,
-      comments: 2,
-      id: 123,
-      userImg: profilepic,
-      userId: 11,
-    },
-    {
-      imgSrc: profilepic,
-      title: "Paradise Biryani",
-      address: "Kukatpally, Hyd",
-      reviews: 0,
-      followers: 0,
-      stars: 3,
-      days: 10,
-      votes: 10,
-      comments: 2,
-      id: 123,
-      userImg: profilepic,
-      userId: 11,
-    },
-  ];
+  const { id } = useParams(); // Get the shop ID from the URL
+  const [ratings, setRatings] = useState([]); // State to store fetched ratings
+  const [error, setError] = useState(null); // State for error handling
 
-  const options1 = [
-    "All Reviews",
-    "Following",
-    "Popular",
-    "Bloggers",
-    "My Reviews",
-    "Order Reviews",
-  ];
+  useEffect(() => {
+    const fetchRatings = async () => {
+      try {
+        const token = Cookies.get("token");
+        const response = await fetch(
+          `http://localhost:8085/api/v1/user/getRating?shopId=${id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-  const options2 = [
-    "Newest First",
-    "Oldest First",
-    "Highest Rated",
-    "Lowest Rated",
-  ];
+        if (!response.ok) {
+          const errorData = await response.json(); // Fetch error data if the response is not ok
+          throw new Error(`Error: ${errorData.message || response.statusText}`);
+        }
+
+        const data = await response.json();
+        setRatings(data); // Update the state with fetched ratings
+      } catch (error) {
+        console.error("Failed to fetch ratings:", error);
+        setError(error.message); // Set error state
+      }
+    };
+
+    fetchRatings();
+  }, [id]); // Trigger effect on 'id' change
+
+  // Define the data to display in the reviews
+  let data = ratings.map((rating) => ({
+    imgSrc: profilepic, // You may want to replace this with a dynamic image if available
+    name: rating.userName, // Assuming your API returns user name
+    stars: rating.rate, // Assuming this is the correct field
+    comment: rating.comment,
+  }));
 
   return (
     <div className={css.outerDiv}>
       <div className={css.innerDiv}>
         <div className={css.left}>
-          {/* <div className={css.dropDowns}>
-          <DropdownUtil options={options1} icon2={dropdownIcon} filFunc={(val) => console.log(val)} />
-          <DropdownUtil options={options2} icon1={menu} icon2={dropdownIcon}  filFunc={(val) => console.log(val)} />
-        </div> */}
           <div className={css.re}>
-            {data?.map((item, id) => {
-              return <RestUserReviewedCard ket={id} data={item} />;
-            })}
+            {data.map((item, index) => (
+              <RestUserReviewedCard key={index} data={item} /> // Use 'index' as key
+            ))}
           </div>
         </div>
         <div className={css.right}>

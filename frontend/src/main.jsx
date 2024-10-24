@@ -21,6 +21,7 @@ import TestPage from "./pages/TestPage/TestPage";
 import App from "./App";
 import "./index.css";
 import Login from "./components/Auth/Login/Login";
+import RateYourExperienceCard from "./utils/Cards/RestaurantBodyCards/RateYourExperienceCard/RateYourExperienceCard";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -42,6 +43,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/order/:id/:page" element={<RestaurantPage />} />
         <Route path="/test" element={<TestPage />} />
         <Route path="*" element={<ErrorPage />} />
+        <Route path="/rate-experience" element={<RateYourExperienceCard />} />
+
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<ShopDashboard />} />
         <Route path="/order/:id" element={<RestaurantPage />} />

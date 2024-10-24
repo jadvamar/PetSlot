@@ -26,8 +26,6 @@ const DatePickerComponent = ({
     return hours + ":" + minutes + " " + ampm;
   };
 
-  // Function to convert "HH:MM:SS" format to "HH:MM"
-  // Function to convert "HH:MM:SS" format to "HH:MM"
   const formatToHHMM = (timeString) => {
     if (!timeString) {
       console.error("Invalid timeString:", timeString);
@@ -39,21 +37,42 @@ const DatePickerComponent = ({
 
   // Function to check if a given slot is unavailable by comparing start times
   const isSlotUnavailable = (slotStartTime) => {
-    return unavailableTimeRanges.some((range) => {
-      const rangeStart = formatToHHMM(range.start); // Convert range start to "HH:MM"
-      const slotStart = formatToHHMM(slotStartTime); // Convert slot start to "HH:MM"
+    const slotStart = formatToHHMM(slotStartTime); // Converts "HH:MM:SS" to "HH:MM"
 
-      // Check if the start times match
-      return slotStart === rangeStart;
+    console.log("slotStartTime : ", slotStartTime);
+    console.log("slotStart : ", slotStart);
+    console.log("unavailableTimeRanges : ", unavailableTimeRanges);
+    return unavailableTimeRanges.some((range) => {
+      const rangeStart = formatToHHMM(range.startTime); // Ensure ranges are in "HH:MM"
+      const rangeEnd = formatToHHMM(range.endTime);
+      console.log("unavailable : ", rangeStart, rangeEnd);
+      if (!rangeStart || !rangeEnd) {
+        console.error("Invalid time range:", range);
+        return false;
+      }
+
+      return slotStart >= rangeStart && slotStart < rangeEnd;
     });
   };
 
   // Function to generate hourly time slots between start and end time
   const generateHourlySlots = (startTime, endTime) => {
+    // Check for valid input
+    if (!startTime || !endTime) {
+      console.error("Invalid startTime or endTime:", startTime, endTime);
+      return []; // Return an empty array if invalid
+    }
+
     const start = new Date(`1970-01-01T${startTime}`);
     const end = new Date(`1970-01-01T${endTime}`);
-    const slots = [];
 
+    // Ensure dates are valid
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+      console.error("Invalid Date created from startTime and endTime");
+      return []; // Return an empty array if invalid dates
+    }
+
+    const slots = [];
     let currentTime = new Date(start);
     currentTime.setMinutes(0);
     currentTime.setSeconds(0);
@@ -77,6 +96,7 @@ const DatePickerComponent = ({
   useEffect(() => {
     // Generate time slots when startTime or endTime changes
     const slots = generateHourlySlots(startTimeFromBackend, endTimeFromBackend);
+    // console.log(slots);
     setTimeSlots(slots);
   }, [startTimeFromBackend, endTimeFromBackend]);
 

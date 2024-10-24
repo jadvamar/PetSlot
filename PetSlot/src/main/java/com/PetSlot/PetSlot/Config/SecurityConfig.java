@@ -63,7 +63,9 @@ public class SecurityConfig implements WebMvcConfigurer {
                                 "/api/v1/user/book-slot",
                                 "/api/v1/user/getBookings",
                                 "/api/v1/user/getHistory",
-                                "/api/v1/user/makeComplete"
+                                "/api/v1/user/makeComplete",
+                                "api/v1/user/rating",
+                                "api/v1/user/getRating"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

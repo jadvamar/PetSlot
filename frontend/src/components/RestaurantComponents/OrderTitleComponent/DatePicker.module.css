@@ -46,5 +46,5 @@
 }
 
 .unavailable:hover {
-  background-color: #e0e0e0; /* No hover effect for unavailable slots */
+  background-color: #ed4253; /* No hover effect for unavailable slots */
 }

@@ -136,9 +136,9 @@ let ShowCase = () => {
           </div>
         </div>
       ) : null}
-      <div className={css.innerDiv3}>
+      {/* <div className={css.innerDiv3}>
         <div className={css.filtersDiv}>{filterBoxes}</div>
-      </div>
+      </div> */}
       {/* {page === orderOnlinePage ? <div className={css.innerDiv4}>
             <div className={css.w7}>
                 <div className={css.innerDiv4Title}>

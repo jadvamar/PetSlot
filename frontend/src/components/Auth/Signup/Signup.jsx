@@ -1,10 +1,9 @@
 import { createPortal } from "react-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import gLogo from "/images/google.png";
 import mailLogo from "/images/emailIcon.jpg";
 import closeBtn from "/images/closeBtn.jpg";
-
 import signupCss from "./Signup.module.css";
 
 let Signup = ({ setAuth }) => {
@@ -14,8 +13,9 @@ let Signup = ({ setAuth }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
-  const [errors, setErrors] = useState({}); // To store error messages
-  const [message, setMessage] = useState(""); // For success or error messages
+  const [errors, setErrors] = useState({});
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const validateForm = () => {
     const newErrors = {};
@@ -53,44 +53,63 @@ let Signup = ({ setAuth }) => {
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // Return true if no errors
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent default form submission
-    setMessage(""); // Clear previous messages
+    e.preventDefault();
+    setMessage("");
     if (validateForm()) {
       try {
         const response = await axios.post(
           "http://localhost:8085/api/v1/user/signup",
-          {
-            role,
-            name,
-            email,
-            password,
-          }
+          { role, name, email, password }
         );
         console.log("User registered:", response.data);
-        setMessage("Registration successful!"); // Set success message
-        // Optionally reset the form or redirect the user after successful signup
+        setMessage("Registration successful!");
       } catch (error) {
-        if (error.response) {
-          // Check if the error is due to an existing user
-          if (error.response.status === 401) {
-            // If user already exists
-            setErrors({ email: "User with this email already exists." });
-            setMessage("User with this email already exists."); // Set error message
-          } else {
-            // Handle other errors
-            console.error("Error:", error.response.data);
-            alert(error.response.data); // Display error message to user
-          }
+        if (error.response && error.response.status === 401) {
+          setErrors({ email: "User with this email already exists." });
+          setMessage("User with this email already exists.");
         } else {
-          console.error("Error:", error.message);
+          console.error("Error:", error.response ? error.response.data : error);
         }
       }
     }
   };
+
+  const handleGoogleSignup = () => {
+    google.accounts.id.initialize({
+      client_id:
+        "51593724276-h3djp2kbqho92b1en6jhov0v2glgni24.apps.googleusercontent.com", // Replace with your client ID
+      callback: async (response) => {
+        const id_token = response.credential;
+        try {
+          const serverResponse = await axios.post(
+            "http://localhost:8085/api/v1/user/google-signup",
+            { token: id_token, role }
+          );
+          console.log("Google Signup Response:", serverResponse.data);
+          setMessage("Signup successful!");
+          setAuth({ token: serverResponse.data.token });
+        } catch (error) {
+          console.error("Error during Google signup:", error);
+          alert("Google signup failed.");
+        }
+      },
+    });
+
+    google.accounts.id.prompt(); // Show the one-tap prompt
+  };
+
+  useEffect(() => {
+    // Load the Google script only when the component mounts
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+  }, []);
 
   let loginDiv = (
     <div className={signupCss.outerDiv}>
@@ -111,8 +130,6 @@ let Signup = ({ setAuth }) => {
           </span>
         </div>
         <form onSubmit={handleSubmit}>
-          {" "}
-          {/* Handle form submission */}
           <div className={signupCss.lgBox}>
             <input
               className={signupCss.inpBox}
@@ -180,7 +197,7 @@ let Signup = ({ setAuth }) => {
               />
               <label htmlFor="Company">Company</label>
             </div>
-            <br></br>
+            <br />
 
             <span className={signupCss.termsTxt}>
               <input
@@ -189,7 +206,7 @@ let Signup = ({ setAuth }) => {
                 id="accept"
                 className={signupCss.checkBox}
                 checked={termsAccepted}
-                onChange={() => setTermsAccepted(!termsAccepted)} // Toggle checkbox
+                onChange={() => setTermsAccepted(!termsAccepted)}
               />
               <span>
                 I agree to PetSlot's{" "}
@@ -210,13 +227,16 @@ let Signup = ({ setAuth }) => {
               Create Account
             </button>
 
-            {/* Display success or error messages here */}
             {message && <span className={signupCss.message}>{message}</span>}
           </div>
+
           <div className={signupCss.orBreak}>
             <span className={signupCss.orBreakText}>or</span>
           </div>
-          <div className={signupCss.socialSignupBox}>
+          <div
+            className={signupCss.socialSignupBox}
+            onClick={handleGoogleSignup}
+          >
             <img className={signupCss.icon} src={gLogo} alt="google login" />
             Continue with Google
           </div>

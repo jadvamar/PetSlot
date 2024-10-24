@@ -9,10 +9,15 @@ import com.PetSlot.PetSlot.Services.UserService;
 import com.PetSlot.PetSlot.Services.impl.BookedSlotsService;
 import com.PetSlot.PetSlot.Services.impl.CustomerDetails;
 import java.sql.Time;
+
+import com.PetSlot.PetSlot.Services.impl.RatingService;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.jackson2.JacksonFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +25,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,6 +41,13 @@ import java.util.stream.Collectors;
 public class UserController {
 
     @Autowired
+    public UserController(UserService userService, JwtHelper helper) {
+        this.userService = userService;
+        this.helper = helper;
+    }
+
+
+    @Autowired
     private UserDetailsService userDetailsService;
 
     @Autowired
@@ -44,12 +57,12 @@ public class UserController {
     ShopService shopService;
 
     @Autowired
-    private JwtHelper helper;
+    private final JwtHelper helper;
 
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     private BookedSlotsRepository bookedSlotsRepository;
@@ -65,6 +78,8 @@ public class UserController {
     private ServicesRepository servicesRepository;
     @Autowired
     private PetsRepository petsRepository;
+    @Autowired
+    private RatingService ratingService;
 
     @PostMapping(path = "/signup")
     public ResponseEntity<String> signupUser(@RequestBody UserDTO userDTO) {
@@ -72,7 +87,63 @@ public class UserController {
         String response = userService.signupUser(userDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+    @PostMapping("/google-signup")
+    public ResponseEntity<?> googleSignup(@RequestBody GoogleTokenRequestDTO tokenRequest) {
+        try {
+            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new JacksonFactory())
+                    .setAudience(Collections.singletonList("51593724276-h3djp2kbqho92b1en6jhov0v2glgni24.apps.googleusercontent.com"))
+                    .build();
 
+            GoogleIdToken idToken = verifier.verify(tokenRequest.getToken());
+            if (idToken != null) {
+                GoogleIdToken.Payload payload = idToken.getPayload();
+
+                String email = payload.getEmail();
+                String name = (String) payload.get("name");
+                String role = tokenRequest.getRole(); // Extract the role from the request
+
+                // Create a new user or retrieve existing user by email, including the role
+                User user = userService.registerGoogleUser(email, name, role); // Pass the role to the user registration method
+                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+
+                // Generate JWT token
+                String jwtToken = helper.generateToken(userDetails);
+                JwtResponseDTO response = JwtResponseDTO.builder()
+                        .token(jwtToken)
+                        .username(userDetails.getUsername()).build();
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Google token.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Google signup failed.");
+        }
+    }
+
+
+
+    @PostMapping(path = "/rating")
+    public ResponseEntity<?> addRating(@RequestBody RatingDTO ratingDTO){
+        try {
+            Rating savedRating = ratingService.saveRating(ratingDTO);
+            return new ResponseEntity<>(savedRating, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Failed to save rating: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping(path="/getRating")
+    public ResponseEntity<?> getRating(@RequestParam Long shopId){
+        try{
+            List<RatingDTO> ratingDTO = ratingService.getRating(shopId);
+            System.out.println(ratingDTO);
+            return new ResponseEntity<>(ratingDTO,HttpStatus.OK);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>("Failed to fetch rating: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional
     @PostMapping("/book-slot")
     public ResponseEntity<?> bookSlot(@RequestBody BookedSlotDTO bookedSlotDTO) {
         try {
@@ -182,6 +253,36 @@ public class UserController {
         }
     }
 
+    @PostMapping("/google-login")
+    public ResponseEntity<?> googleLogin(@RequestBody GoogleTokenRequestDTO tokenRequest) {
+        try {
+            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new JacksonFactory())
+                    .setAudience(Collections.singletonList("51593724276-mrejr24evg2oqgnt7cjl64lr4djpb0a7.apps.googleusercontent.com"))
+                    .build();
+
+            GoogleIdToken idToken = verifier.verify(tokenRequest.getToken());
+            if (idToken != null) {
+                GoogleIdToken.Payload payload = idToken.getPayload();
+
+                String email = payload.getEmail();
+                User user = userService.isVailable(email);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+                if (user != null) {
+                    String jwtToken = helper.generateToken(userDetails);
+                    JwtResponseDTO response = JwtResponseDTO.builder()
+                            .token(jwtToken)
+                            .username(userDetails.getUsername()).build();
+                    return new ResponseEntity<>(response, HttpStatus.OK);
+                } else {
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found.");
+                }
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Google token.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Google login failed.");
+        }
+    }
     
 
     @PostMapping(path = "/login")
@@ -266,7 +367,7 @@ public class UserController {
 
             response.add(dto);
         }
-        if(response != null) System.out.println("responce");
+        System.out.println("response");
 
         return ResponseEntity.ok(response);
     }

@@ -64,6 +64,10 @@ public class Shop {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @OneToMany(mappedBy = "shop", fetch = FetchType.LAZY, cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonManagedReference
+    private List<Rating> rating;
+
     @OneToMany(mappedBy = "shop", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<BookedSlots> bookedSlots;

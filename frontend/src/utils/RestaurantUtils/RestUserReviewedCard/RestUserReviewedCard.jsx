@@ -1,7 +1,5 @@
 import { useState } from "react";
-
 import css from "./RestUserReviewedCard.module.css";
-
 import downArrowImg from "/icons/down-arrow.png";
 import starImg from "/icons/star.png";
 import shareImg from "/icons/share.png";
@@ -9,38 +7,26 @@ import likeImg from "/icons/like.png";
 import likedImg from "/icons/liked.png";
 import comment from "/icons/message.png";
 import close from "/icons/close.png";
-
 import RatingNumberBox from "../RatingNumberBox/RatingNumberBox";
 import WhiteBtnHov from "../../Buttons/WhiteBtnHov/WhiteBtnHov";
 import RedBtnHov from "../../Buttons/RedBtnHov/RedBtnHov";
+import profilepic from "/images/profilepic.jpg";
 
 const RestUserReviewedCard = (props) => {
-  let {
-    imgSrc,
-    title,
-    address,
-    reviews,
-    followers,
-    stars,
-    days,
-    votes,
-    comments,
-    id,
-    userImg,
-  } = props?.data;
-  let [alertBoxCss, setAlertBoxCss] = useState(
+  const { imgSrc, name, stars, comment } = props.data;
+  const [alertBoxCss, setAlertBoxCss] = useState(
     [css.alertBox, css.dnone].join(" ")
   );
-  let [liked, setLiked] = useState(false);
-  let [toggleDropDown, setToggleDropDown] = useState(false);
-  let [toggleCommentBox, setToggleCommentBox] = useState(false);
-  let [following, setFollowing] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [toggleDropDown, setToggleDropDown] = useState(false);
+  const [toggleCommentBox, setToggleCommentBox] = useState(false);
+  const [following, setFollowing] = useState(false);
 
-  let toggleDropdown = () => {
+  const toggleDropdown = () => {
     setToggleDropDown((val) => !val);
   };
 
-  let shareURL = () => {
+  const shareURL = () => {
     navigator.clipboard.writeText(document.URL);
     setAlertBoxCss(css.alertBox);
     setTimeout(() => {
@@ -48,7 +34,7 @@ const RestUserReviewedCard = (props) => {
     }, 5000);
   };
 
-  let closeAlert = () => {
+  const closeAlert = () => {
     setAlertBoxCss([css.alertBox, css.dnone].join(" "));
   };
 
@@ -68,76 +54,23 @@ const RestUserReviewedCard = (props) => {
                 <img className={css.hotelImg} src={imgSrc} alt="hotel image" />
               </div>
               <div className={css.txtBox1}>
-                <div className={css.title}>{title}</div>
-                {/* <div className={css.det}>
-                  <div className={css.userDet}>{reviews} Reviews</div>
-                  <div></div>
-                  <div className={css.userDet}>{followers} Followers</div>
-                </div> */}
+                <div className={css.title}>{name}</div>
               </div>
             </div>
-            {/* <div className={css.rightBox}>
-                    {!following ? <WhiteBtnHov txt="Follow" onClick={() => setFollowing(true)} /> : <RedBtnHov txt="Following" onClick={() => setFollowing(false)} /> }
-                </div> */}
           </div>
           <div className={css.sec}>
             <span className={css.delivery}>
-              {" "}
               <RatingNumberBox
                 stars={stars}
                 txt={stars}
                 iconR={false}
                 isActive={true}
-              />{" "}
-              {/* <span className={css.delTxt}>Delivery</span> */}
-            </span>
-            <span className={css.days}>{days} days ago</span>
-          </div>
-          <div className={css.sec}>
-            <div className={css.txt}>
-              {votes} Votes for helpful, {comments} Comments
-            </div>
-          </div>
-          <div className={css.sec}>
-            <div
-              className={css.txtBox2}
-              onClick={() => setLiked((val) => !val)}
-            >
-              <img
-                src={liked ? likedImg : likeImg}
-                alt="thumbs up"
-                className={css.icon}
               />
-              <span className={css.txt2}>Helpful</span>
-            </div>
-            <div
-              className={css.txtBox2}
-              onClick={() => setToggleCommentBox((val) => !val)}
-            >
-              <img src={comment} alt="comment" className={css.icon} />
-              <span className={css.txt2}>Comment</span>
-            </div>
-            <div className={css.txtBox2} onClick={shareURL}>
-              <img src={shareImg} alt="share" className={css.icon} />
-              <span className={css.txt2}>Share</span>
-            </div>
+            </span>
           </div>
+          <p>{comment}</p>
         </div>
       </div>
-      {/* {toggleCommentBox ? (
-        <div className={css.commentBox}>
-          <div className={css.userImgBox}>
-            <img src={userImg} className={css.userImg} alt="user profile pic" />
-          </div>
-          <div className={css.inputBox}>
-            <input
-              type="text"
-              className={css.inptTxtBox}
-              placeholder="Write your comment"
-            />
-          </div>
-        </div>
-      ) : null} */}
     </>
   );
 };

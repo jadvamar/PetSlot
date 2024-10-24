@@ -34,6 +34,9 @@ public class User {
     private Shop shop;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Rating> rating;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<BookedSlots> shopUserBoxes;
 

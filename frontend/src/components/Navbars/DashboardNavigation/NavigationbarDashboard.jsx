@@ -90,7 +90,7 @@ let NavigationBar = ({ toggleMenu, setToggleMenu, setShops }) => {
                 style={{ display: menuDisplay ? "block" : "" }}
               >
                 <Link to="/user/ll/reviews" className={css.menuItemLinkTxt}>
-                  <div className={css.menuItemLink}>Profile</div>
+                  <div className={css.menuItemLink}>History</div>
                 </Link>
                 {userRole === "company" && (
                   <Link to="/dashboard" className={css.menuItemLinkTxt}>
@@ -98,9 +98,9 @@ let NavigationBar = ({ toggleMenu, setToggleMenu, setShops }) => {
                   </Link>
                 )}
 
-                <Link to="/user/ll/settings" className={css.menuItemLinkTxt}>
+                {/* <Link to="/user/ll/settings" className={css.menuItemLinkTxt}>
                   <div className={css.menuItemLink}>Settings</div>
-                </Link>
+                </Link> */}
                 <div className={css.menuItemLinkTxt} onClick={logoutHandler}>
                   <div className={css.menuItemLink}>Logout</div>
                 </div>
