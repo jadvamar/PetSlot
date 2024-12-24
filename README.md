@@ -49,7 +49,9 @@ Location displayed on an interactive map for easy navigation
 
 ## Overview of Project
 
-![login]([https://github.com/jadvamar/file_sharing_with_password/assets/103949217/36b8a540-271c-4ff0-9fc6-72e9279d70b5](https://github.com/jadvamar/pictures/blob/master/signup.png?raw=true))
+![login](https://github.com/jadvamar/pictures/blob/master/signup.png?raw=true)
+
+![login](https://github.com/jadvamar/pictures/blob/master/shop%20page%201.png?raw=true)
 
 ![login](https://github.com/jadvamar/pictures/blob/master/search.png?raw=true)
 
@@ -57,7 +59,7 @@ Location displayed on an interactive map for easy navigation
 
 ![login](https://github.com/jadvamar/pictures/blob/master/shop%20page%202.png?raw=true)
 
-![login](https://github.com/jadvamar/file_sharing_with_password/assets/103949217/9f0ba021-6d12-4bfd-84b4-61ff056f71d9](https://github.com/jadvamar/pictures/blob/master/shop%20page%203.png?raw=true))
+![login]((https://github.com/jadvamar/pictures/blob/master/shop%20page%203.png?raw=true))
 
 ![login](https://github.com/jadvamar/pictures/blob/master/shop%20page%204.png?raw=true)
 
