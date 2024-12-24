@@ -1,7 +1,7 @@
 # PetSlot
 Pet Slot is an online platform where pet service shops can register and offer their services to pet owners. Users can search for nearby shops based on location, book available slots, and view the shop’s details, including services, location on the map, and reviews. Pet service shops can manage bookings, mark services as completed, and interact with users through reviews.
 
-# Features
+## Features
 Shop Registration and Service Management
 
 Pet service shops can register on the platform and list their services for pet care (e.g., grooming, training, boarding, etc.).
@@ -36,7 +36,7 @@ Photos of the shop and its facilities
 Services offered with detailed descriptions and pricing
 Location displayed on an interactive map for easy navigation
 
-# Technology used
+#$ Technology used
 `Spring Boot`
 `ReactJS`
 `MySql`
@@ -47,7 +47,7 @@ Location displayed on an interactive map for easy navigation
 
 `yarn run dev`
 
-# Overview of Project
+## Overview of Project
 
 ### 1)Dashboard
 ![login](https://github.com/jadvamar/file_sharing_with_password/assets/103949217/36b8a540-271c-4ff0-9fc6-72e9279d70b5)
