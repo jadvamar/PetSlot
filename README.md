@@ -1,4 +1,4 @@
-# PetSlot
+![image](https://github.com/user-attachments/assets/fe1ba105-80d4-4786-bfd3-9e696e2e19ba)![image](https://github.com/user-attachments/assets/bbc90010-2086-4068-9cfa-8c7b9afe593b)# PetSlot
 Pet Slot is an online platform where pet service shops can register and offer their services to pet owners. Users can search for nearby shops based on location, book available slots, and view the shop’s details, including services, location on the map, and reviews. Pet service shops can manage bookings, mark services as completed, and interact with users through reviews.
 
 ## Features
@@ -49,17 +49,18 @@ Location displayed on an interactive map for easy navigation
 
 ## Overview of Project
 
-### 1)Dashboard
-![login](https://github.com/jadvamar/file_sharing_with_password/assets/103949217/36b8a540-271c-4ff0-9fc6-72e9279d70b5)
+![login]([https://github.com/jadvamar/file_sharing_with_password/assets/103949217/36b8a540-271c-4ff0-9fc6-72e9279d70b5](https://github.com/jadvamar/pictures/blob/master/signup.png?raw=true))
 
-### 2)Upload file add add password 
-![login](https://github.com/jadvamar/file_sharing_with_password/assets/103949217/2aceff9c-c6d1-4435-bdc5-d95bb4299077)
+![login](https://github.com/jadvamar/pictures/blob/master/search.png?raw=true)
 
-### 3)Link will be generated you can copy
-![login](https://github.com/jadvamar/file_sharing_with_password/assets/103949217/24c08633-7c57-4d25-8eba-0d6c2776bfe7)
+![login](https://github.com/jadvamar/pictures/blob/master/shop%20page%201.png?raw=true)
 
-### 4)Enter password to download the file
-![login](https://github.com/jadvamar/file_sharing_with_password/assets/103949217/4e2d7c9c-2f11-4115-9748-7cfd99acebaa)
+![login](https://github.com/jadvamar/pictures/blob/master/shop%20page%202.png?raw=true)
 
-### 5)File will be download
-![login](https://github.com/jadvamar/file_sharing_with_password/assets/103949217/9f0ba021-6d12-4bfd-84b4-61ff056f71d9)
+![login](https://github.com/jadvamar/file_sharing_with_password/assets/103949217/9f0ba021-6d12-4bfd-84b4-61ff056f71d9](https://github.com/jadvamar/pictures/blob/master/shop%20page%203.png?raw=true))
+
+![login](https://github.com/jadvamar/pictures/blob/master/shop%20page%204.png?raw=true)
+
+![login](https://github.com/jadvamar/pictures/blob/master/shop%20dashboard.png?raw=true)
+
+![login](https://github.com/jadvamar/pictures/blob/master/history.png?raw=true)
