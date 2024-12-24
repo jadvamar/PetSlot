@@ -1,11 +1,40 @@
 # PetSlot
-The secure file-sharing website! Created Using Express, MongoDB, and Node.js, our platform ensures seamless and protected file transfers. With an intuitive user interface, you can effortlessly upload, download, and manage your files.
+Pet Slot is an online platform where pet service shops can register and offer their services to pet owners. Users can search for nearby shops based on location, book available slots, and view the shop’s details, including services, location on the map, and reviews. Pet service shops can manage bookings, mark services as completed, and interact with users through reviews.
 
-The core of our system lies in its robust password protection feature, granting you complete control over who accesses your files. When uploading a file, you can set a unique password that recipients must enter before downloading. This safeguard guarantees that only authorized users gain access to sensitive data.
+# Features
+Shop Registration and Service Management
 
-Our platform utilizes MongoDB to store user accounts, file metadata, and encrypted passwords, ensuring data integrity and security. Node.js facilitates efficient and scalable data transmission, making file-sharing a breeze.
+Pet service shops can register on the platform and list their services for pet care (e.g., grooming, training, boarding, etc.).
+Shop owners can manage their available services, update pricing, and manage working hours.
+User Search for Shops Based on Location
 
-Enjoy the convenience of sharing files while keeping your information safe from unauthorized access. Experience seamless file exchange with our easy-to-use, password-protected file-sharing website.
+Users can search for pet service shops based on their location.
+The platform uses a map integration to store and display shop locations accurately.
+The map provides users with a visual representation of nearby shops.
+Booking Available Slots
+
+After selecting a shop, users can choose the desired date for a service.
+Available time slots for the chosen date are displayed, and users can select an available slot for booking.
+Slot availability is updated in real-time to prevent double bookings.
+JWT Authentication for Secure Access
+
+JWT (JSON Web Tokens) is used to secure and authenticate both users and shop owners.
+This ensures secure login and protects sensitive user information during bookings, reviews, and other interactions.
+Service Completion and History
+
+After a service is completed, the shop owner can mark the service as “done” in the system.
+Once marked, the completed service will reflect in the user’s booking history, providing them with an overview of past services.
+Review System
+
+After a service is completed, users can leave reviews for the shop.
+Reviews help other users make informed decisions when selecting shops.
+Reviews can include ratings and comments based on the user's experience.
+Shop Profile with Detailed Information
+
+Each shop has a dedicated page where users can view important information like:
+Photos of the shop and its facilities
+Services offered with detailed descriptions and pricing
+Location displayed on an interactive map for easy navigation
 
 # Technology used
 `Spring Boot`
@@ -14,16 +43,9 @@ Enjoy the convenience of sharing files while keeping your information safe from 
 `JWT Token`
 
     
-## How to  run on Your Machine
+## command to run the project 
 
-download mongoDb on your PC
-Just Download this folder from github
-
-then run following commands 
-
-`npm i express mongoose multer ejs bcrypt dotenv`
-
-`npm i --save-dev nodemon`
+`yarn run dev`
 
 # Overview of Project
 
