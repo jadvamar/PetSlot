@@ -36,7 +36,7 @@ Photos of the shop and its facilities
 Services offered with detailed descriptions and pricing
 Location displayed on an interactive map for easy navigation
 
-#$ Technology used
+## Technology used
 `Spring Boot`
 `ReactJS`
 `MySql`
