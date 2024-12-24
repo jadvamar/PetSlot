@@ -1,4 +1,4 @@
-# File Sharing with Password
+# PetSlot
 The secure file-sharing website! Created Using Express, MongoDB, and Node.js, our platform ensures seamless and protected file transfers. With an intuitive user interface, you can effortlessly upload, download, and manage your files.
 
 The core of our system lies in its robust password protection feature, granting you complete control over who accesses your files. When uploading a file, you can set a unique password that recipients must enter before downloading. This safeguard guarantees that only authorized users gain access to sensitive data.
@@ -8,11 +8,10 @@ Our platform utilizes MongoDB to store user accounts, file metadata, and encrypt
 Enjoy the convenience of sharing files while keeping your information safe from unauthorized access. Experience seamless file exchange with our easy-to-use, password-protected file-sharing website.
 
 # Technology used
-`HTML`
-`CSS`
-`mongoDB`
-`Node`
-`Express`
+`Spring Boot`
+`ReactJS`
+`MySql`
+`JWT Token`
 
     
 ## How to  run on Your Machine
